@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256">
+  <rect width="100%" height="100%" fill="#f0f9ff"/>
+  <circle cx="128" cy="128" r="100" fill="#d1fae5"/>
+  <circle cx="96" cy="106" r="12" fill="#111827"/>
+  <circle cx="160" cy="106" r="12" fill="#111827"/>
+  <path d="M88 156 Q128 188 168 156" stroke="#111827" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <text x="50%" y="230" font-size="18" text-anchor="middle" fill="#065f46">HAPPY</text>
+</svg>
