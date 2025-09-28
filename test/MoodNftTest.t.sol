@@ -32,25 +32,14 @@ contract MoodNftTest is Test, ZkSyncChainChecker, FoundryZkSyncChecker {
             moodNft = deployer.run();
         } else {
             string memory sadSvg = vm.readFile("./images/dynamicNft/sad.svg");
-            string memory happySvg = vm.readFile(
-                "./images/dynamicNft/happy.svg"
-            );
-            moodNft = new MoodNft(
-                deployer.svgToImageURI(sadSvg),
-                deployer.svgToImageURI(happySvg)
-            );
+            string memory happySvg = vm.readFile("./images/dynamicNft/happy.svg");
+            moodNft = new MoodNft(deployer.svgToImageURI(sadSvg), deployer.svgToImageURI(happySvg));
         }
     }
 
     function testInitializedCorrectly() public view {
-        assert(
-            keccak256(abi.encodePacked(moodNft.name())) ==
-                keccak256(abi.encodePacked((NFT_NAME)))
-        );
-        assert(
-            keccak256(abi.encodePacked(moodNft.symbol())) ==
-                keccak256(abi.encodePacked((NFT_SYMBOL)))
-        );
+        assert(keccak256(abi.encodePacked(moodNft.name())) == keccak256(abi.encodePacked((NFT_NAME))));
+        assert(keccak256(abi.encodePacked(moodNft.symbol())) == keccak256(abi.encodePacked((NFT_SYMBOL))));
     }
 
     function testCanMintAndHaveABalance() public {
@@ -64,10 +53,7 @@ contract MoodNftTest is Test, ZkSyncChainChecker, FoundryZkSyncChecker {
         vm.prank(USER);
         moodNft.mintNft();
 
-        assert(
-            keccak256(abi.encodePacked(moodNft.tokenURI(0))) ==
-                keccak256(abi.encodePacked(HAPPY_MOOD_URI))
-        );
+        assert(keccak256(abi.encodePacked(moodNft.tokenURI(0))) == keccak256(abi.encodePacked(HAPPY_MOOD_URI)));
     }
 
     function testFlipTokenToSad() public {
@@ -77,10 +63,7 @@ contract MoodNftTest is Test, ZkSyncChainChecker, FoundryZkSyncChecker {
         vm.prank(USER);
         moodNft.flipMood(0);
 
-        assert(
-            keccak256(abi.encodePacked(moodNft.tokenURI(0))) ==
-                keccak256(abi.encodePacked(SAD_MOOD_URI))
-        );
+        assert(keccak256(abi.encodePacked(moodNft.tokenURI(0))) == keccak256(abi.encodePacked(SAD_MOOD_URI)));
     }
 
     // logging events doesn't work great in foundry-zksync
