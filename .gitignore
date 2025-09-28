@@ -32,3 +32,6 @@ coverage/
 # Proof artifacts
 proofs/*.log
 !proofs/*-sanitized.log
+# Proof artifacts
+proofs/*.log
+!proofs/*-sanitized.log

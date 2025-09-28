@@ -1,0 +1,21 @@
+=== ENV ===
+RPC   : <REDACTED_RPC_URL>
+BASIC : 0x44060e503682015ef0912ef97d25067e6fe0c1c7
+MOOD  : 0x659a96e8ecba88c79c8edeeab2f3a701c12d1392
+ME    : 0xF6d3a3104b75b0BD2498856C1283e7120c315AeC
+
+=== PROOF: CODE EXISTS ===
+BasicNft codesize: 8008
+MoodNft  codesize: 11098
+
+=== BASIC NFT ===
+ownerOf(0): 0xF6d3a3104b75b0BD2498856C1283e7120c315AeC
+tokenURI(0) [IPFS]: "ipfs://bafybeig37ioir76s7mg5oobetncojcm3c3hxasyd4rvid4jqhy4gkaheg4/?filename=0-PUG.json"
+
+=== MOOD NFT ===
+ownerOf(0): 0xF6d3a3104b75b0BD2498856C1283e7120c315AeC
+tokenURI(0) [data:... base64] (first 120 chars): "data:application/json;base64,eyJuYW1lIjoiTW9vZCBORlQiLCAiZGVzY3JpcHRpb24iOiJBbiBORlQgdGhhdCByZWZsZWN0cyB0aGUgbW9vZCBvZi
+
+=== BROADCAST (DEPLOY TXS) ===
+BASIC tx: <REDACTED_HEX64> | addr: 0x44060e503682015ef0912ef97d25067e6fe0c1c7
+MOOD  tx: <REDACTED_HEX64> | addr: 0x659a96e8ecba88c79c8edeeab2f3a701c12d1392
