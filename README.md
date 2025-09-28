@@ -24,6 +24,7 @@ Unlike a straight copy, this repo includes hands-on work to **extract Token URIs
   * [Deploy Scripts](#deploy-scripts)
   * [Formatting](#formatting)
 * [Testing & Coverage](#testing--coverage)
+* [Deployment Proof](#deployment-proof-sepolia-testnet)
 * [Security Notes](#security-notes)
 * [Acknowledgements](#acknowledgements)
 * [Contact](#contact)
@@ -185,6 +186,88 @@ forge coverage --report lcov
 ```
 
 > Latest local snapshot showed all tests passing (12/12) and line coverage ~**62%** overall. Coverage excludes complex integration bits and example scripts by design; feel free to extend tests further.
+
+---
+
+## Deployment Proof (Sepolia Testnet)
+
+> This section provides on-chain proof that both NFTs were deployed and interacted with on the Sepolia testnet.  
+> It includes contract addresses, Etherscan links, and exact transactions for minting and flipping the dynamic NFT.
+
+### Contracts
+
+- **BasicNft (IPFS metadata)** — `0x44060e503682015Ef0912ef97d25067e6FE0c1c7`  
+  Etherscan: https://sepolia.etherscan.io/address/0x44060e503682015ef0912ef97d25067e6fe0c1c7
+
+- **MoodNft (100% on-chain SVG, dynamic)** — `0x659A96E8ECba88c79C8edeEab2f3A701c12D1392`  
+  Etherscan: https://sepolia.etherscan.io/address/0x659a96e8ecba88c79c8edeeab2f3a701c12d1392
+
+### Key Transactions
+
+- **Mint BasicNft (tokenId = 0)**  
+  Tx: https://sepolia.etherscan.io/tx/0xa933e5a190252a770c8818b42a430bc6ed3100ffb467d0bf62d1c9d93731e01a
+
+- **Mint MoodNft (tokenId = 0)**  
+  Tx: https://sepolia.etherscan.io/tx/0xe6f803ce4b647fdb684145dca155de62b640c933e636650732c76815687a131e
+
+- **Flip MoodNft (Happy → Sad)**  
+  Tx: https://sepolia.etherscan.io/tx/0x2f22d309d01e137b21667a24c1bfc038788c3c7a3fff200e7f0bd780f771e1ab
+
+### How to Verify Manually
+
+**BasicNft → `tokenURI(0)`** returns the IPFS JSON:
+```
+
+ipfs://bafybeig37ioir76s7mg5oobetncojcm3c3hxasyd4rvid4jqhy4gkaheg4/?filename=0-PUG.json
+
+````
+
+**MoodNft → `tokenURI(0)`** returns an on-chain data URI with Base64-encoded JSON where
+`image` is `data:image/svg+xml;base64,...`.
+
+On Etherscan → **Contract** → **Read Contract**:
+- Call `ownerOf(0)` to confirm owner address.
+- Call `tokenURI(0)` to see metadata URI.
+
+### Reproduce Interactions Locally (cast)
+
+> Requires `.env` with `SEPOLIA_RPC_URL` and `PRIVATE_KEY` (test key, **no real funds**).
+
+```bash
+# Load env (Linux/macOS)
+set -a && source .env && set +a
+
+# Convenience variables
+export RPC="$SEPOLIA_RPC_URL"
+export PK="$PRIVATE_KEY"
+
+# Your deployed contracts
+export BASIC=0x44060e503682015Ef0912ef97d25067e6FE0c1c7
+export MOOD=0x659A96E8ECba88c79C8edeEab2f3A701c12D1392
+
+# Mint BasicNft (tokenId = 0)
+cast send $BASIC "mintNft(string)" \
+  "ipfs://bafybeig37ioir76s7mg5oobetncojcm3c3hxasyd4rvid4jqhy4gkaheg4/?filename=0-PUG.json" \
+  --rpc-url $RPC --private-key $PK
+
+# Check owner and tokenURI
+cast call $BASIC "ownerOf(uint256)(address)" 0 --rpc-url $RPC
+cast call $BASIC "tokenURI(uint256)(string)" 0 --rpc-url $RPC
+
+# Mint MoodNft (tokenId = 0)
+cast send $MOOD "mintNft()" --rpc-url $RPC --private-key $PK
+
+# Check tokenURI (Happy)
+cast call $MOOD "tokenURI(uint256)(string)" 0 --rpc-url $RPC
+
+# Flip to Sad and verify tokenURI changed
+cast send $MOOD "flipMood(uint256)" 0 --rpc-url $RPC --private-key $PK
+cast call $MOOD "tokenURI(uint256)(string)" 0 --rpc-url $RPC
+````
+
+> Note: Some wallets on testnets do not index NFTs reliably. Etherscan’s **Token Tracker** and direct `tokenURI` reads are the most deterministic way to verify.
+
+---
 
 ## Security Notes
 
