@@ -24,3 +24,7 @@ docs/
 lcov.info
 coverage/
 coverage.json
+
+# Coverage
+lcov.info
+coverage/
