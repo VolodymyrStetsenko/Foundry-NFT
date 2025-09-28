@@ -28,3 +28,7 @@ coverage.json
 # Coverage
 lcov.info
 coverage/
+
+# Proof artifacts
+proofs/*.log
+!proofs/*-sanitized.log
