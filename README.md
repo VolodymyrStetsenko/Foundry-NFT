@@ -277,7 +277,7 @@ cast call $MOOD "tokenURI(uint256)(string)" 0 --rpc-url $RPC
 
 ## Acknowledgements
 
-* Built while following **Patrick Collins** and **Cyfrin Updraft – Foundry Fundamentals**
+* Built while following **Patrick Collins** and **Cyfrin Updraft – Foundry Advanced**
   Course: [https://updraft.cyfrin.io/courses/foundry](https://updraft.cyfrin.io/courses/foundry)
 
 Some ideas mirror the course material, but this repository includes my own configuration, permission hardening, test extensions, CI setup, and documentation.
