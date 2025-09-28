@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test-and-coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true  # ensure lib/ submodules are present
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: stable
+
+      - name: Show versions
+        run: |
+          forge --version
+          solc --version || true
+
+      - name: Cache Forge build & lib
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.foundry/cache
+            out
+            lib
+          key: ${{ runner.os }}-foundry-${{ hashFiles('foundry.toml') }}-${{ hashFiles('lib/**','src/**','script/**','test/**') }}
+
+      - name: Install dependencies (if any)
+        run: |
+          # If repo uses forge install workflow. Safe to run; no-op if already present.
+          forge install || true
+
+      - name: Run tests (optimized)
+        run: forge test -vvv --root .
+
+      - name: Run coverage (lcov)
+        run: forge coverage --root . --report lcov
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lcov.info
+          path: lcov.info
+          if-no-files-found: error
