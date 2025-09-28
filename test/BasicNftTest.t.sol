@@ -29,8 +29,14 @@ contract BasicNftTest is Test, ZkSyncChainChecker {
     }
 
     function testInitializedCorrectly() public view {
-        assert(keccak256(abi.encodePacked(basicNft.name())) == keccak256(abi.encodePacked((NFT_NAME))));
-        assert(keccak256(abi.encodePacked(basicNft.symbol())) == keccak256(abi.encodePacked((NFT_SYMBOL))));
+        assert(
+            keccak256(abi.encodePacked(basicNft.name())) ==
+                keccak256(abi.encodePacked((NFT_NAME)))
+        );
+        assert(
+            keccak256(abi.encodePacked(basicNft.symbol())) ==
+                keccak256(abi.encodePacked((NFT_SYMBOL)))
+        );
     }
 
     function testCanMintAndHaveABalance() public {
@@ -44,7 +50,10 @@ contract BasicNftTest is Test, ZkSyncChainChecker {
         vm.prank(USER);
         basicNft.mintNft(PUG_URI);
 
-        assert(keccak256(abi.encodePacked(basicNft.tokenURI(0))) == keccak256(abi.encodePacked(PUG_URI)));
+        assert(
+            keccak256(abi.encodePacked(basicNft.tokenURI(0))) ==
+                keccak256(abi.encodePacked(PUG_URI))
+        );
     }
 
     // Remember, scripting doesn't work with zksync as of today!
@@ -56,4 +65,29 @@ contract BasicNftTest is Test, ZkSyncChainChecker {
     // }
 
     // can you get the coverage up?
+
+    function testOwnerOfAfterMint() public {
+        vm.prank(USER);
+        basicNft.mintNft(PUG_URI);
+        assertEq(basicNft.ownerOf(0), USER);
+    }
+
+    function testTokenURIRevertsForNonexistent() public {
+        vm.expectRevert(); // ERC721: invalid token ID
+        basicNft.tokenURI(999);
+    }
+
+    function testApproveAndTransfer() public {
+        vm.prank(USER);
+        basicNft.mintNft(PUG_URI);
+
+        // USER approves this contract to manage the token
+        vm.prank(USER);
+        basicNft.approve(address(this), 0);
+        assertEq(basicNft.getApproved(0), address(this));
+
+        // Transfer the token to another address
+        basicNft.transferFrom(USER, address(0xBEEF), 0);
+        assertEq(basicNft.ownerOf(0), address(0xBEEF));
+    }
 }

@@ -1,15 +1,26 @@
-# Compiler files
-cache/
+# Foundry build artifacts & cache
 out/
+cache/
 
-# Ignores development broadcast logs
-!/broadcast
-/broadcast/*/31337/
-/broadcast/**/dry-run/
+# Broadcasts 
+broadcast/
+
+# Node & editors
+node_modules/
+.vscode/
+
+# Env files
+.env
+.env.*
+
+# Forge debug artifacts
+*.t.sol.json
+*.dbg.json
 
 # Docs
 docs/
 
-# Dotenv file
-.env
-broadcast/
+# Coverage artifacts
+lcov.info
+coverage/
+coverage.json
